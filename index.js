@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const port = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 // middlewares
 app.use(express.json());
@@ -32,10 +32,10 @@ async function run() {
     //   await client.connect();
 
     // make data base
-    const visaCollection = client
+    const visaCollection = client.db("flyAbroad").collection("allVisa");
+    const appliedVisaCollection = client
       .db("flyAbroad")
-      .collection("allVisa");
-
+      .collection("appliedVisa");
 
     // routes .....................................................................
     //   get all added visa
@@ -45,18 +45,23 @@ async function run() {
       res.send(result);
     });
 
-
-
     //   add visa
-    app.post('/addVisa', async(req,res)=>{
+    app.post("/addVisa", async (req, res) => {
       const visaData = req.body;
       const result = await visaCollection.insertOne(visaData);
       res.send(result);
-    })
+    });
 
+    // get single visa by id
+    app.get("/visa/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await visaCollection.findOne(query);
+      res.send(result);
+    });
 
-
-    
+    // get all applied visa
+    // app.get()
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
