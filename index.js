@@ -32,16 +32,31 @@ async function run() {
     //   await client.connect();
 
     // make data base
-    const visaApplicationCollection = client
+    const visaCollection = client
       .db("flyAbroad")
-      .collection("visaApplication");
+      .collection("allVisa");
 
-    //   get all visa application
-    app.get("/allApplications", async (req, res) => {
-      const result = await visaApplicationCollection.find().toArray();
-      console.log(result);
+
+    // routes .....................................................................
+    //   get all added visa
+    app.get("/allVisa", async (req, res) => {
+      const result = await visaCollection.find().toArray();
+      // console.log(result);
       res.send(result);
     });
+
+
+
+    //   add visa
+    app.post('/addVisa', async(req,res)=>{
+      const visaData = req.body;
+      const result = await visaCollection.insertOne(visaData);
+      res.send(result);
+    })
+
+
+
+    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
