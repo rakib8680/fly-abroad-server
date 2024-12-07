@@ -71,7 +71,20 @@ async function run() {
     })
 
 
+    // update visa 
+    app.patch("/updateVisa/:id", async(req,res)=>{
+      const id = req.params.id;
+      const visa = {_id: new ObjectId(id)};
+      const body = req.body;
+      const updateVisa = {
+        $set : {
+          ...body
+        }
+      }
 
+      const result = await visaCollection.updateOne(visa, updateVisa);
+      res.send(result);
+    })
 
 
 
