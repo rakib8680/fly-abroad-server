@@ -45,7 +45,7 @@ async function run() {
       res.send(result);
     });
 
-    //   add visa
+    // add visa
     app.post("/addVisa", async (req, res) => {
       const visaData = req.body;
       const result = await visaCollection.insertOne(visaData);
@@ -92,9 +92,13 @@ async function run() {
     });
 
 
-
-
+    // get all applied visa
+    app.get('/appliedVisa', async(req,res)=>{
+      const result = await appliedVisaCollection.find().toArray(); 
+      res.send(result);
+    })
     
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
