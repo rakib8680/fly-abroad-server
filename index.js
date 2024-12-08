@@ -60,36 +60,41 @@ async function run() {
       res.send(result);
     });
 
-
-
     // get user specific visa
-    app.get("/myVisa/:email", async (req, res) =>{
+    app.get("/myVisa/:email", async (req, res) => {
       const email = req.params.email;
-      const query = {visa_creator_email: email};
+      const query = { visa_creator_email: email };
       const result = await visaCollection.find(query).toArray();
       res.send(result);
-    })
+    });
 
-
-    // update visa 
-    app.patch("/updateVisa/:id", async(req,res)=>{
+    // update visa
+    app.patch("/updateVisa/:id", async (req, res) => {
       const id = req.params.id;
-      const visa = {_id: new ObjectId(id)};
+      const visa = { _id: new ObjectId(id) };
       const body = req.body;
       const updateVisa = {
-        $set : {
-          ...body
-        }
-      }
+        $set: {
+          ...body,
+        },
+      };
 
       const result = await visaCollection.updateOne(visa, updateVisa);
       res.send(result);
-    })
+    });
+
+    // delete visa
+    app.delete("/deleteVisa/:id", async (req, res) => {
+      const id = req.params.id;
+      const visa = { _id: new ObjectId(id) };
+      const result = await visaCollection.deleteOne(visa);
+      res.send(result);
+    });
 
 
 
 
-
+    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
