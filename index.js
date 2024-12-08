@@ -40,13 +40,17 @@ async function run() {
     // routes .....................................................................
     //   get all added visa
     app.get("/allVisa", async (req, res) => {
-      const result = await visaCollection.find().toArray();
+      const result = await visaCollection
+        .find()
+        .sort({ createdAt: -1 })
+        .toArray();
       res.send(result);
     });
 
     // add visa
     app.post("/addVisa", async (req, res) => {
       const visaData = req.body;
+      visaData.createdAt = new Date();
       const result = await visaCollection.insertOne(visaData);
       res.send(result);
     });
@@ -104,14 +108,12 @@ async function run() {
     });
 
     // get user specific applied visa
-    app.get('/myAppliedVisa/:email', async (req, res) => {
+    app.get("/myAppliedVisa/:email", async (req, res) => {
       const email = req.params.email;
-      const query = {Email: email};
+      const query = { Email: email };
       const result = await appliedVisaCollection.find(query).toArray();
       res.send(result);
-    })
-
-
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
