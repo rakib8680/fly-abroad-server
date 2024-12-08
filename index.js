@@ -90,20 +90,27 @@ async function run() {
       res.send(result);
     });
 
-
     // get all applied visa
-    app.get('/appliedVisa', async(req,res)=>{
-      const result = await appliedVisaCollection.find().toArray(); 
+    app.get("/appliedVisa", async (req, res) => {
+      const result = await appliedVisaCollection.find().toArray();
       res.send(result);
-    })
+    });
 
     // apply visa
-    app.post('/applyVisa', async (req,res)=>{
+    app.post("/applyVisa", async (req, res) => {
       const applicationData = req.body;
       const result = await appliedVisaCollection.insertOne(applicationData);
       res.send(result);
+    });
+
+    // get user specific applied visa
+    app.get('/myAppliedVisa/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = {Email: email};
+      const result = await appliedVisaCollection.find(query).toArray();
+      res.send(result);
     })
-    
+
 
 
     // Send a ping to confirm a successful connection
