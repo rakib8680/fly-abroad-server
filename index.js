@@ -41,7 +41,6 @@ async function run() {
     //   get all added visa
     app.get("/allVisa", async (req, res) => {
       const result = await visaCollection.find().toArray();
-      // console.log(result);
       res.send(result);
     });
 
@@ -95,6 +94,13 @@ async function run() {
     // get all applied visa
     app.get('/appliedVisa', async(req,res)=>{
       const result = await appliedVisaCollection.find().toArray(); 
+      res.send(result);
+    })
+
+    // apply visa
+    app.post('/applyVisa', async (req,res)=>{
+      const applicationData = req.body;
+      const result = await appliedVisaCollection.insertOne(applicationData);
       res.send(result);
     })
     
